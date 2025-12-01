@@ -1,4 +1,5 @@
 {
+  "name": "expo-next-router",
   "version": "0.0.1",
   "description": "Auto-generate Expo Router routes from feature-based folders as NextJS",
   "devDependencies": {
