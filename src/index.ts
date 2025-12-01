@@ -9,7 +9,7 @@ async function run() {
     await sync(config);
     if (config.watch) {
       watcher({
-        dir: config.pagesDir,
+        dir: config.workDir,
         verbose: config.verbose,
         onChange: () => sync(config),
       });

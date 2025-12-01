@@ -8,7 +8,7 @@ export interface ConfigOptions {
   watch: boolean;
   extensions: string[];
   appDir: string;
-  pagesDir: string;
+  workDir: string;
   verbose: boolean;
 }
 
@@ -54,9 +54,9 @@ export async function getConfig() {
       appDir: path.isAbsolute(userConfig.appDir)
         ? userConfig.appDir
         : path.resolve(projectRoot, userConfig.appDir),
-      pagesDir: path.isAbsolute(userConfig.pagesDir)
-        ? userConfig.pagesDir
-        : path.resolve(projectRoot, userConfig.pagesDir),
+      workDir: path.isAbsolute(userConfig.workDir)
+        ? userConfig.workDir
+        : path.resolve(projectRoot, userConfig.workDir),
     };
   } catch {
     console.log(

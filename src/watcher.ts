@@ -37,11 +37,9 @@ interface Config {
 }
 
 export function watcher({ dir, verbose = false, onChange }: Config) {
-  const pagesDir = path.isAbsolute(dir)
-    ? dir
-    : path.resolve(process.cwd(), dir);
+  const workDir = path.isAbsolute(dir) ? dir : path.resolve(process.cwd(), dir);
 
-  const watcher = chokidar.watch(pagesDir, {
+  const watcher = chokidar.watch(workDir, {
     ignored: /(^|[/\\])\../,
     ignoreInitial: true,
     persistent: true,

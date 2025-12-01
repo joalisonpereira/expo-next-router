@@ -18,15 +18,15 @@ function getNextFilePatterns(extensions: string[]) {
 
 type GetRouteFilesOptions = Pick<
   ConfigOptions,
-  "appDir" | "pagesDir" | "extensions"
+  "appDir" | "workDir" | "extensions"
 >;
 
 export async function sync({
   extensions,
-  pagesDir,
+  workDir,
   appDir,
 }: GetRouteFilesOptions) {
-  const files = await listFilesAndDirectoriesRecursive(pagesDir);
+  const files = await listFilesAndDirectoriesRecursive(workDir);
 
   const filteredFiles = files.filter((filePath) => {
     const ext = path.extname(filePath);
@@ -48,7 +48,7 @@ export async function sync({
     return {
       filePath,
       expoRoutePath: filePath
-        .replace(pagesDir, appDir)
+        .replace(workDir, appDir)
         .replace(name, expoRouteName),
     };
   });
@@ -70,18 +70,18 @@ export async function sync({
     }
   }
 
-  await cleanupOrphanedFiles({ appDir, pagesDir, extensions });
+  await cleanupOrphanedFiles({ appDir, workDir, extensions });
 }
 
 async function cleanupOrphanedFiles({
   appDir,
-  pagesDir,
+  workDir,
   extensions,
 }: GetRouteFilesOptions) {
   const files = await listFilesAndDirectoriesRecursive(appDir);
 
   const validExpoRoutePaths = new Set(
-    (await listFilesAndDirectoriesRecursive(pagesDir))
+    (await listFilesAndDirectoriesRecursive(workDir))
       .filter((filePath) => {
         const ext = path.extname(filePath);
 
@@ -94,7 +94,7 @@ async function cleanupOrphanedFiles({
       })
       .map((filePath) =>
         filePath
-          .replace(pagesDir, appDir)
+          .replace(workDir, appDir)
           .replace(
             path.basename(filePath).split(".")[0]!,
             NEXT_FILE_MAPPER[

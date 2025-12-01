@@ -32,7 +32,7 @@ module.exports = {
   verbose: true,
   extensions: ["js", "jsx", "ts", "tsx"],
   appDir: "example/app",
-  pagesDir: "example/pages",
+  workDir: "example/pages",
 };
 ```
 
@@ -40,13 +40,13 @@ module.exports = {
 
 | Key          | Type       | Default                      | Description                                                                                                 |
 | ------------ | ---------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `watch`      | `boolean`  | `false`                      | Enables the watcher so routes stay in sync with `pagesDir` on every change.                                 |
+| `watch`      | `boolean`  | `false`                      | Enables the watcher so routes stay in sync with `workDir` on every change.                                  |
 | `verbose`    | `boolean`  | `false`                      | Prints colorful logs for watcher events.                                                                    |
 | `extensions` | `string[]` | `["js", "jsx", "ts", "tsx"]` | File extensions considered during sync.                                                                     |
 | `appDir`     | `string`   | —                            | Target Expo `app/` directory. Accepts relative or absolute paths.                                           |
-| `pagesDir`   | `string`   | —                            | Source folder with Next.js-style files (`page`, `layout`, `not-found`). Accepts relative or absolute paths. |
+| `workDir`    | `string`   | —                            | Source folder with Next.js-style files (`page`, `layout`, `not-found`). Accepts relative or absolute paths. |
 
-> `appDir` and `pagesDir` must be provided. The remaining options have defaults and can be omitted.
+> `appDir` and `workDir` must be provided. The remaining options have defaults and can be omitted.
 
 ## Usage ▶️
 
@@ -57,7 +57,7 @@ npx expo-next-router
 ```
 
 - Reads the config file, mirrors `page`, `layout`, and `not-found` files into `app/`, and removes orphaned routes.
-- When `watch: true`, a watcher observes `pagesDir` and keeps routes synchronized automatically.
+- When `watch: true`, a watcher observes `workDir` and keeps routes synchronized automatically.
 
 For day-to-day development, add `concurrently` to your `package.json` so the router runs alongside `expo start`:
 

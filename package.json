@@ -1,6 +1,6 @@
 {
   "name": "expo-next-router",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Auto-generate Expo Router routes from feature-based folders as NextJS",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
