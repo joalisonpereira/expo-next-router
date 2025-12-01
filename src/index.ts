@@ -1,4 +1,5 @@
-import { getConfig, sync } from "./core";
+import { getConfig } from "./config";
+import { sync } from "./core";
 import { watcher } from "./watcher";
 
 async function run() {
@@ -10,9 +11,7 @@ async function run() {
       watcher({
         dir: config.pagesDir,
         verbose: config.verbose,
-        onChange: () => {
-          sync(config);
-        },
+        onChange: () => sync(config),
       });
     }
   }

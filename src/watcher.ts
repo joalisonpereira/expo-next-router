@@ -1,7 +1,7 @@
 import chokidar from "chokidar";
 import path from "node:path";
 import chalk from "chalk";
-import { DIRNAME } from "./core";
+import { NEXT_FILE_MAPPER } from "./core";
 
 const EVENTS = {
   ALL: "all",
@@ -37,7 +37,9 @@ interface Config {
 }
 
 export function watcher({ dir, verbose = false, onChange }: Config) {
-  const pagesDir = path.join(DIRNAME, "..", dir);
+  const pagesDir = path.isAbsolute(dir)
+    ? dir
+    : path.resolve(process.cwd(), dir);
 
   const watcher = chokidar.watch(pagesDir, {
     ignored: /(^|[/\\])\../,
@@ -59,7 +61,10 @@ export function watcher({ dir, verbose = false, onChange }: Config) {
 
     onChange();
 
-    if (verbose) {
+    if (
+      verbose &&
+      Object.keys(NEXT_FILE_MAPPER).some((key) => filePath.includes(`${key}.`))
+    ) {
       console.log(
         `${chalk.bold.blue("[Router]")} ${formattedEvent} ${chalk.dim(
           displayPath

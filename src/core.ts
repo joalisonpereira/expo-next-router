@@ -2,16 +2,11 @@ import chalk from "chalk";
 import { readdir } from "node:fs/promises";
 import path from "node:path";
 import fs from "node:fs/promises";
-import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
-
-const __filename = fileURLToPath(import.meta.url);
-
-export const DIRNAME = dirname(__filename);
+import type { ConfigOptions } from "./config";
 
 export const NEXT_FILE_MAPPER = {
-  page: "page",
-  layout: "layout",
+  page: "index",
+  layout: "_layout",
   ["not-found"]: "+not-found",
 };
 
@@ -21,7 +16,10 @@ function getNextFilePatterns(extensions: string[]) {
   );
 }
 
-type GetRouteFilesOptions = Pick<Config, "appDir" | "pagesDir" | "extensions">;
+type GetRouteFilesOptions = Pick<
+  ConfigOptions,
+  "appDir" | "pagesDir" | "extensions"
+>;
 
 export async function sync({
   extensions,
@@ -64,12 +62,6 @@ export async function sync({
 
     const contentCheck = await fs.readFile(route.filePath, "utf-8");
 
-    console.log(
-      route.filePath,
-      contentCheck.includes("export"),
-      contentCheck.includes("default")
-    );
-
     if (contentCheck.includes("export") && contentCheck.includes("default")) {
       await createFileIfNotExists(
         route.expoRoutePath,
@@ -78,7 +70,82 @@ export async function sync({
     }
   }
 
-  return routesConfig;
+  await cleanupOrphanedFiles({ appDir, pagesDir, extensions });
+}
+
+async function cleanupOrphanedFiles({
+  appDir,
+  pagesDir,
+  extensions,
+}: GetRouteFilesOptions) {
+  const files = await listFilesAndDirectoriesRecursive(appDir);
+
+  const validExpoRoutePaths = new Set(
+    (await listFilesAndDirectoriesRecursive(pagesDir))
+      .filter((filePath) => {
+        const ext = path.extname(filePath);
+
+        return (
+          filePath.endsWith(ext) &&
+          getNextFilePatterns(extensions).some((pattern) =>
+            filePath.endsWith(pattern)
+          )
+        );
+      })
+      .map((filePath) =>
+        filePath
+          .replace(pagesDir, appDir)
+          .replace(
+            path.basename(filePath).split(".")[0]!,
+            NEXT_FILE_MAPPER[
+              path
+                .basename(filePath)
+                .split(".")[0]! as keyof typeof NEXT_FILE_MAPPER
+            ]
+          )
+      )
+  );
+
+  //remove orphaned files
+  for (const filePath of files) {
+    if (!validExpoRoutePaths.has(filePath)) {
+      try {
+        await fs.unlink(filePath);
+      } catch {
+        //continue
+      }
+    }
+  }
+
+  //clear empty folders
+  await removeEmptyDirs(appDir);
+}
+
+async function removeEmptyDirs(dir: string): Promise<boolean> {
+  let isDirEmpty = true;
+
+  const entries = await readdir(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+
+    if (entry.isDirectory()) {
+      const emptied = await removeEmptyDirs(fullPath);
+      if (!emptied) {
+        isDirEmpty = false;
+      }
+    } else {
+      isDirEmpty = false;
+    }
+  }
+
+  if (isDirEmpty) {
+    await fs.rmdir(dir);
+
+    return true;
+  }
+
+  return false;
 }
 
 async function listFilesAndDirectoriesRecursive(
@@ -103,35 +170,6 @@ async function listFilesAndDirectoriesRecursive(
   await walk(dir);
 
   return result;
-}
-
-interface Config {
-  watch: boolean;
-  extensions: string[];
-  appDir: string;
-  pagesDir: string;
-  verbose: boolean;
-}
-
-export async function getConfig() {
-  const CONFIG_FILE_PATH = path.join(DIRNAME, "../expo-next-router.config.js");
-
-  console.log(CONFIG_FILE_PATH);
-
-  try {
-    const config = await import(CONFIG_FILE_PATH).then(
-      (mod) => mod.default || mod
-    );
-
-    return config as Config;
-  } catch (e) {
-    console.log(e);
-    console.log(
-      chalk.red(
-        "Failed to load configuration file [expo-next-router.config.js]"
-      )
-    );
-  }
 }
 
 async function createFileIfNotExists(filePath: string, content: string) {

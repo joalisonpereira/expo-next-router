@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   watch: true,
   verbose: true,
   extensions: ["js", "jsx", "ts", "tsx"],
