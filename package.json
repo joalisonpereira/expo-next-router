@@ -1,6 +1,6 @@
 {
   "name": "expo-next-router",
-  "version": "0.0.5",
+  "version": "0.0.1",
   "description": "Auto-generate Expo Router routes from feature-based folders as NextJS",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -25,7 +25,7 @@
     "prepublish": "npm build"
   },
   "bin": {
-    "expo-next-router": "./dist/index.js"
+    "expo-next-router": "dist/index.js"
   },
   "author": {
     "email": "joalison.pereira@hotmail.com",
@@ -34,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/joalisonpereira/expo-next-router.git"
+    "url": "git+https://github.com/joalisonpereira/expo-next-router.git"
   },
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
