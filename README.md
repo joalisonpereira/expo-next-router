@@ -1,8 +1,8 @@
-# expo-next-router
+# expo-next-router 🚀
 
 Library that brings the familiar Next.js file-based routing conventions to Expo Router projects. By introducing an intermediate `pages/` folder, it ensures only files following the `page`, `layout`, and `not-found` conventions become routes, leaving the rest of your feature structure free for plain components.
 
-## Why it helps
+## Why it helps 🌟
 
 - Mirrors the Next.js feature folder layout to reduce onboarding friction.
 - Prevents auxiliary components from unintentionally becoming Expo routes.
@@ -10,7 +10,7 @@ Library that brings the familiar Next.js file-based routing conventions to Expo 
 - Removes orphaned route files and empty folders to keep the project tidy.
 - Works with both JavaScript and TypeScript projects out of the box.
 
-## Installation
+## Installation 📦
 
 ```bash
 npm install --save-dev expo-next-router
@@ -22,7 +22,7 @@ Using Yarn:
 yarn add --dev expo-next-router
 ```
 
-## Configuration
+## Configuration ⚙️
 
 Create an `expo-next-router.config.js` (or `.mjs`, `.cjs`, `.json`) at the project root:
 
@@ -48,7 +48,7 @@ module.exports = {
 
 > `appDir` and `pagesDir` must be provided. The remaining options have defaults and can be omitted.
 
-## Usage
+## Usage ▶️
 
 Run the sync through the CLI:
 
@@ -84,6 +84,6 @@ project/
 
 Inside `pages/`, feel free to add any other files or components without the reserved filenames (`page`, `layout`, `not-found`); they remain ordinary modules you can import.
 
-## Support and contributions
+## Support and contributions 🤝
 
 Open an issue at `https://github.com/joalisonpereira/expo-next-router/issues` for questions, suggestions, or bug reports. Pull requests are welcome!
