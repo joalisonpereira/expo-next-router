@@ -1,0 +1,21 @@
+import { getConfig, sync } from "./core";
+import { watcher } from "./watcher";
+
+async function run() {
+  const config = await getConfig();
+
+  if (config) {
+    await sync(config);
+    if (config.watch) {
+      watcher({
+        dir: config.pagesDir,
+        verbose: config.verbose,
+        onChange: () => {
+          sync(config);
+        },
+      });
+    }
+  }
+}
+
+run();
