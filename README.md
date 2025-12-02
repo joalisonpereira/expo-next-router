@@ -1,6 +1,6 @@
 # expo-next-router 🚀
 
-Library that brings the familiar Next.js file-based routing conventions to Expo Router projects. By introducing an intermediate `pages/` folder, it ensures only files following the `page`, `layout`, and `not-found` conventions become routes, leaving the rest of your feature structure free for plain components.
+Library that brings the familiar Next.js file-based routing conventions to Expo Router projects. By introducing an intermediate `pages/` folder, it guarantees that only `page`, `layout`, and `not-found` files turn into routes—so you can confidently keep child components, hooks, and utilities right beside the page file without polluting Expo Router.
 
 ## Why it helps 🌟
 
@@ -79,6 +79,7 @@ project/
 │  ├─ layout.tsx
 │  └─ about/
 │     └─ page.tsx
+│     └─ Form.tsx   # common components will not generate route
 └─ expo-next-router.config.js
 ```
 
