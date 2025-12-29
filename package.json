@@ -1,6 +1,6 @@
 {
   "name": "expo-next-router",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Auto-generate Expo Router routes from feature-based folders as NextJS",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -22,7 +22,7 @@
     "dev": "tsx src/index.ts",
     "lint": "eslint . --ext .ts,.tsx,.mts --fix",
     "build": "tsup",
-    "prepublish": "npm build"
+    "prepublish": "npm run build"
   },
   "bin": {
     "expo-next-router": "dist/index.js"
